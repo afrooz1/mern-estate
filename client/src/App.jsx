@@ -6,6 +6,7 @@ import About from './pages/About';
 import Profile from './pages/Profile';
 import SignIn from './pages/SignIn';
 import Header from './components/Header';
+import Footer from './components/Footer';
  
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route path='/about' element={<About/>}></Route>
       <Route path='/profile' element={<Profile/>}></Route>
     </Routes>
+    {/* <Footer/> */}
     </BrowserRouter>
   )
 }
