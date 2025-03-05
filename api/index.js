@@ -24,8 +24,16 @@ app.get("/", (req, res) => {
 // ✅ Define routes before starting the server
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
-// console.log("User Routes:", userRouter.stack);
-// console.log("Auth Routes:", authRouter.stack);
+
+app.use((err,req,res,next)=> {
+   const statusCode = err.statusCode || 500;
+   const message = err.message || 'Internal server error'
+   return res.status(statusCode).json({
+      sucess:false,
+      statusCode,
+      message,
+   })
+})
 
 
 const PORT = process.env.PORT || 3000;
