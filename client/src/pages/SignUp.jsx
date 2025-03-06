@@ -1,7 +1,47 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+// import OAuth from '../components/OAuth';
 
-const SignUp = () => {
+export default function SignUp() {
+  const [formData, setFormData] = useState({});
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.success === false) {
+        setLoading(false);
+        setError(data.message);
+        return;
+      }
+      setLoading(false);
+      setError(null);
+      navigate('/sign-in');
+    } catch (error) {
+      setLoading(false);
+      setError(error.message);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
       <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -9,7 +49,7 @@ const SignUp = () => {
         <h1 className="text-3xl font-bold text-teal-400 mb-6 text-center">Sign Up</h1>
 
         {/* Signup Form */}
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {/* Username Input */}
           <div>
             <label htmlFor="username" className="block text-gray-400 mb-2">
@@ -19,6 +59,7 @@ const SignUp = () => {
               type="text"
               id="username"
               placeholder="Enter your username"
+              onChange={handleChange}
               className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
             />
           </div>
@@ -32,6 +73,7 @@ const SignUp = () => {
               type="email"
               id="email"
               placeholder="Enter your email"
+              onChange={handleChange}
               className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
             />
           </div>
@@ -45,17 +87,21 @@ const SignUp = () => {
               type="password"
               id="password"
               placeholder="Enter your password"
+              onChange={handleChange}
               className="w-full px-4 py-2 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400"
             />
           </div>
 
           {/* Signup Button */}
           <button
-            type="submit"
-            className="w-full bg-teal-400 text-gray-900 py-2 rounded-lg font-semibold hover:bg-teal-300 transition duration-300"
+            disabled={loading}
+            className="w-full bg-teal-400 text-gray-900 py-2 rounded-lg font-semibold hover:bg-teal-300 transition duration-300 disabled:opacity-80"
           >
-            Sign Up
+            {loading ? 'Loading...' : 'Sign Up'}
           </button>
+
+          {/* OAuth Component */}
+          {/* <OAuth /> */}
         </form>
 
         {/* Sign In Link */}
@@ -68,9 +114,10 @@ const SignUp = () => {
             Sign In
           </Link>
         </div>
+
+        {/* Error Message */}
+        {error && <p className="text-red-500 mt-5 text-center">{error}</p>}
       </div>
     </div>
   );
-};
-
-export default SignUp;
+}
