@@ -24,15 +24,16 @@ app.get("/", (req, res) => {
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
 
-app.use((err,req,res,next)=> {
+app.use((err, req, res, next) => {
+   console.error(err);
    const statusCode = err.statusCode || 500;
-   const message = err.message || 'Internal server error'
+   const message = err.message || 'Internal server error';
    return res.status(statusCode).json({
-      sucess:false,
-      statusCode,
-      message,
-   })
-})
+     success: false,
+     statusCode,
+     message,
+   });
+ });
 
 
 const PORT = process.env.PORT || 3000;
