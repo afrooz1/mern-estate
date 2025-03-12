@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import OAuth from '../components/OAuth';
 // import OAuth from '../components/OAuth';
 
 export default function SignUp() {
@@ -101,7 +102,7 @@ export default function SignUp() {
           </button>
 
           {/* OAuth Component */}
-          {/* <OAuth /> */}
+          <OAuth />
         </form>
 
         {/* Sign In Link */}

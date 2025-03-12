@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import OAuth from '../components/OAuth';
 
 
 export default function SignIn() {
@@ -89,9 +90,11 @@ export default function SignIn() {
           >
             {loading ? 'Loading...' : 'Sign In'}
           </button>
+          <OAuth />
         </form>
 
         {/* Sign In Link */}
+        
         <div className="mt-6 text-center">
           <p className="text-gray-400">Don't have an account?</p>
           <Link
